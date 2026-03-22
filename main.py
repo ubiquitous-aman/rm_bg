@@ -9,16 +9,16 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
+'''
 @app.post("/remove-bg")
 async def remove_bg(file: UploadFile = File(...)):
     image_bytes = await file.read()
@@ -31,3 +31,14 @@ async def remove_bg(file: UploadFile = File(...)):
     buffer.seek(0)
 
     return StreamingResponse(buffer, media_type="image/png")
+'''
+@app.post("/remove-bg")
+async def remove_bg(file: UploadFile = File(...)):
+    input_bytes = await file.read()
+
+    output_bytes = remove(input_bytes)  # ✅ FIX
+
+    return StreamingResponse(
+        io.BytesIO(output_bytes),
+        media_type="image/png"
+    )
