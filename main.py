@@ -1,6 +1,5 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import StreamingResponse #fixing the issue of file not being downloaded.
-from rembg import remove
 from fastapi.middleware.cors import CORSMiddleware #fixing the issue of different port(8000-uvicorn, 5500-loalhost)
 from PIL import Image
 import io
@@ -34,6 +33,7 @@ async def remove_bg(file: UploadFile = File(...)):
 '''
 @app.post("/remove-bg")
 async def remove_bg(file: UploadFile = File(...)):
+    from rembg import remove
     input_bytes = await file.read()
     
     try:
